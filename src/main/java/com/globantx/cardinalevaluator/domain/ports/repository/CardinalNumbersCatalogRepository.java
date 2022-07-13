@@ -14,11 +14,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 public interface CardinalNumbersCatalogRepository {
-    Map<String, CardinalNumber> getCardinalNumberMap() throws URISyntaxException, IOException;
+    Map<String, CardinalNumber> getCardinalNumberMap();
 
-    boolean hasNumber(String phrase) throws URISyntaxException, IOException ;
+    boolean hasNumber(String phrase) ;
 
-    CardinalNumber getCardinalNumber(String phrase) throws URISyntaxException, IOException;
+    CardinalNumber getCardinalNumber(String phrase);
 
     String getNormalizedText(String phrase);
 }

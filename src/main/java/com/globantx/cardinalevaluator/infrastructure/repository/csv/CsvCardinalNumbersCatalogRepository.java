@@ -1,6 +1,7 @@
 package com.globantx.cardinalevaluator.infrastructure.repository.csv;
 
 import com.globantx.cardinalevaluator.domain.entities.CardinalNumber;
+import com.globantx.cardinalevaluator.domain.exception.CsvParseException;
 import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatal
 
     private Map<String, CardinalNumber> cardinalNumberMap;
 
-    public Map<String, CardinalNumber> getCardinalNumberMap() throws URISyntaxException, IOException {
+    public Map<String, CardinalNumber> getCardinalNumberMap() {
         if (cardinalNumberMap == null) {
             Map<String, CardinalNumber> modifiableMap = new HashMap<>();
             try (Stream<String> stream = Files.lines(Paths.get(ClassLoader.getSystemResource("CardinalNumbersDictionary_es.csv").toURI()))) {
@@ -42,18 +43,22 @@ public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatal
                     isData.set(true);
                 });
                 cardinalNumberMap = Collections.unmodifiableMap(modifiableMap);
+            } catch (IOException e) {
+                throw new CsvParseException("Error to read file csv as cardinal numbers database",e);
+            } catch (URISyntaxException e) {
+                throw new CsvParseException("Error to read file csv as cardinal numbers database",e);
             }
         }
 
         return cardinalNumberMap;
     }
 
-    public boolean hasNumber(String phrase) throws URISyntaxException, IOException {
+    public boolean hasNumber(String phrase) {
 
         return getCardinalNumberMap().containsKey(getNormalizedText(phrase));
     }
 
-    public CardinalNumber getCardinalNumber(String phrase) throws URISyntaxException, IOException {
+    public CardinalNumber getCardinalNumber(String phrase) {
         return getCardinalNumberMap().get(getNormalizedText(phrase));
     }
 

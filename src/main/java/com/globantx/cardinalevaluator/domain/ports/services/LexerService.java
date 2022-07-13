@@ -7,7 +7,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public interface LexerService {
-    List<Token> readAllTokens() throws URISyntaxException, IOException;
+    List<Token> readAllTokens();
 
-    Token readToken() throws URISyntaxException, IOException ;
+    Token readToken();
 }

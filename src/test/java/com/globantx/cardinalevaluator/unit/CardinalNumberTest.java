@@ -1,11 +1,11 @@
 package com.globantx.cardinalevaluator.unit;
 
+import com.globantx.cardinalevaluator.domain.ports.services.ParserService;
 import com.globantx.cardinalevaluator.domain.usescases.PhraseLexerService;
-import com.globantx.cardinalevaluator.domain.usescases.PhraseParserService;
 import com.globantx.cardinalevaluator.domain.commons.TokenTypeEnum;
 import com.globantx.cardinalevaluator.domain.entities.CardinalNumber;
 import com.globantx.cardinalevaluator.domain.entities.Token;
-import com.globantx.cardinalevaluator.domain.exception.ParseException;
+import com.globantx.cardinalevaluator.domain.exception.PhraseParseException;
 import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
@@ -26,6 +26,9 @@ public class CardinalNumberTest {
 
     @Autowired
     private CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository;
+
+    @Autowired
+    ParserService phraseParserService;
 
     @DataTableType
     public Token tokenType(Map<String, String> entry) {
@@ -64,21 +67,28 @@ public class CardinalNumberTest {
     }
     @Then("el valor numerico correspondiente sera {int}")
     public void el_valor_numerico_correspondiente_sera(Integer numericValue) throws URISyntaxException, IOException {
-        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
         Assertions.assertEquals(String.valueOf(numericValue), phraseParserService.parsePhrase(cardinalValue));
     }
 
     @Then("throw parsing exception")
     public void throw_parsing_exception() {
-        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
-        Assertions.assertThrows(ParseException.class,()->{
+        Assertions.assertThrows(PhraseParseException.class,()->{
             phraseParserService.parsePhrase(cardinalValue);});
     }
 
     @Then("El valor numerico es {string}")
     public void el_valor_numerico_es(String expectedValue) throws URISyntaxException, IOException {
-        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
+
         Assertions.assertEquals(expectedValue, phraseParserService.parsePhrase(cardinalValue));
+    }
+
+    @Given("La frase en texto {string}")
+    public void la_frase_en_texto(String phrase) {
+        this.phrase = phrase;
+    }
+    @Then("La frase en numeros {string}")
+    public void la_frase_en_numeros(String expectedPhrase) {
+        Assertions.assertEquals(expectedPhrase, phraseParserService.parsePhrase(phrase));
     }
 
 }

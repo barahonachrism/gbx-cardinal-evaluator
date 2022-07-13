@@ -6,7 +6,5 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface ParserService {
-    String parsePhrase(String phrase) throws URISyntaxException, IOException;
-
-    void validateSyntaxNumber(CardinalNumber previosCardinalNumber, CardinalNumber cardinalNumber);
+    String parsePhrase(String phrase);
 }

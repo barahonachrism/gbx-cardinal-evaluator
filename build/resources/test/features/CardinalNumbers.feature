@@ -249,5 +249,10 @@ Feature: El objetivo es que traduzca frases de todo tipo, que tengan numeros esc
       | noventa mil doscientos |90200|
       | trescientos cuarenta y cinco mil seiscientos setenta y ocho | 345678 |
 
-
+  Scenario Outline: Convertir una frase con numeros en texto con numeros en valores numericos
+    Given La frase en texto "<Given phrase>"
+    Then La frase en numeros "<Expected phrase>"
+    Examples:
+      |Given phrase|Expected phrase|
+      | Quisiera transferir ciento cincuenta pesos a Juan Perez que vive en la calle Rivadavia cuarenta y tres|Quisiera transferir 150 pesos a Juan Perez que vive en la calle Rivadavia 43|
 

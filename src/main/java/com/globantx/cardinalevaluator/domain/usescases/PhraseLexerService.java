@@ -6,8 +6,6 @@ import com.globantx.cardinalevaluator.domain.commons.ConectorTypeEnum;
 import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
 import com.globantx.cardinalevaluator.domain.ports.services.LexerService;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class PhraseLexerService implements LexerService {
         position = 0;
         this.cardinalNumbersCatalogRepository = CardinalNumbersCatalogRepository;
     }
-    public List<Token> readAllTokens() throws URISyntaxException, IOException {
+    public List<Token> readAllTokens() {
         List<Token> tokens = new ArrayList<>();
         Token token = readToken();
         while(token!= null){
@@ -33,7 +31,7 @@ public class PhraseLexerService implements LexerService {
         return tokens;
     }
 
-    public Token readToken() throws URISyntaxException, IOException {
+    public Token readToken() {
         if(position < tokenParts.length) {
             Token token;
             String value = tokenParts[position];
