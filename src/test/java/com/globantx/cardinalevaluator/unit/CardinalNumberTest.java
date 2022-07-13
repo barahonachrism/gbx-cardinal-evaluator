@@ -1,10 +1,17 @@
 package com.globantx.cardinalevaluator.unit;
 
-import com.globantx.cardinalevaluator.*;
+import com.globantx.cardinalevaluator.domain.usescases.PhraseLexerService;
+import com.globantx.cardinalevaluator.domain.usescases.PhraseParserService;
+import com.globantx.cardinalevaluator.domain.commons.TokenTypeEnum;
+import com.globantx.cardinalevaluator.domain.entities.CardinalNumber;
+import com.globantx.cardinalevaluator.domain.entities.Token;
+import com.globantx.cardinalevaluator.domain.exception.ParseException;
+import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,9 +24,12 @@ public class CardinalNumberTest {
 
     private String cardinalValue;
 
+    @Autowired
+    private CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository;
+
     @DataTableType
     public Token tokenType(Map<String, String> entry) {
-        return Token.builder().value(entry.get("Token")).type(TokenType.valueOf(entry.get("Type"))).build();
+        return Token.builder().value(entry.get("Token")).type(TokenTypeEnum.valueOf(entry.get("Type"))).build();
     }
 
     @DataTableType
@@ -44,8 +54,8 @@ public class CardinalNumberTest {
 
     @Then("Obtener los tokes segun la tabla adjunta")
     public void obtener_los_tokes_segun_la_tabla_adjunta(List<Token> tokenList) throws URISyntaxException, IOException {
-        Lexer lexer = new Lexer(phrase);
-        Assertions.assertEquals(tokenList,lexer.readAllTokens());
+        PhraseLexerService phraseLexerService = new PhraseLexerService(phrase,cardinalNumbersCatalogRepository);
+        Assertions.assertEquals(tokenList, phraseLexerService.readAllTokens());
     }
 
     @Given("El numero cardinal {string}")
@@ -54,20 +64,21 @@ public class CardinalNumberTest {
     }
     @Then("el valor numerico correspondiente sera {int}")
     public void el_valor_numerico_correspondiente_sera(Integer numericValue) throws URISyntaxException, IOException {
-        Parser parser = new Parser();
-        Assertions.assertEquals(String.valueOf(numericValue),parser.parsePhrase(cardinalValue));
+        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
+        Assertions.assertEquals(String.valueOf(numericValue), phraseParserService.parsePhrase(cardinalValue));
     }
 
     @Then("throw parsing exception")
     public void throw_parsing_exception() {
-        Parser parser = new Parser();
-        Assertions.assertThrows(ParseException.class,()->{parser.parsePhrase(cardinalValue);});
+        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
+        Assertions.assertThrows(ParseException.class,()->{
+            phraseParserService.parsePhrase(cardinalValue);});
     }
 
     @Then("El valor numerico es {string}")
     public void el_valor_numerico_es(String expectedValue) throws URISyntaxException, IOException {
-        Parser parser = new Parser();
-        Assertions.assertEquals(expectedValue,parser.parsePhrase(cardinalValue));
+        PhraseParserService phraseParserService = new PhraseParserService(cardinalNumbersCatalogRepository);
+        Assertions.assertEquals(expectedValue, phraseParserService.parsePhrase(cardinalValue));
     }
 
 }

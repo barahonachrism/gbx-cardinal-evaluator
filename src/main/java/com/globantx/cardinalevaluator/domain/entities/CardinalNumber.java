@@ -1,4 +1,4 @@
-package com.globantx.cardinalevaluator;
+package com.globantx.cardinalevaluator.domain.entities;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Getter
 public class CardinalNumber {
     private String singularCardinalName;
-    private OrderCardinalNumberEnum order;
     private boolean plural;
     private String numericValueText;
     private BigDecimal decimalExponential;

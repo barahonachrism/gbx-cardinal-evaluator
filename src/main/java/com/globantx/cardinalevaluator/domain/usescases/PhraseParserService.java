@@ -1,4 +1,11 @@
-package com.globantx.cardinalevaluator;
+package com.globantx.cardinalevaluator.domain.usescases;
+
+import com.globantx.cardinalevaluator.domain.exception.ParseException;
+import com.globantx.cardinalevaluator.domain.entities.Token;
+import com.globantx.cardinalevaluator.domain.commons.TokenTypeEnum;
+import com.globantx.cardinalevaluator.domain.entities.CardinalNumber;
+import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
+import com.globantx.cardinalevaluator.domain.ports.services.ParserService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -6,17 +13,22 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parser {
+public class PhraseParserService implements ParserService {
+    private CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository;
+    public PhraseParserService(CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository){
+        this.cardinalNumbersCatalogRepository = cardinalNumbersCatalogRepository;
+    }
+    @Override
     public String parsePhrase(String phrase) throws URISyntaxException, IOException {
-        Lexer lexer = new Lexer(phrase);
-        Token token = lexer.readToken();
+        PhraseLexerService phraseLexerService = new PhraseLexerService(phrase,cardinalNumbersCatalogRepository);
+        Token token = phraseLexerService.readToken();
         BigDecimal numericValue = BigDecimal.ZERO;
         List<Token> numericTokens = new ArrayList<>();
-        while(token != null && token.getType().equals(TokenType.NUMBER)){
+        while(token != null && token.getType().equals(TokenTypeEnum.NUMBER)){
             numericTokens.add(token);
-            token = lexer.readToken();
-            if(token!=null && token.getType().equals(TokenType.CONNECTOR)){
-                token = lexer.readToken();
+            token = phraseLexerService.readToken();
+            if(token!=null && token.getType().equals(TokenTypeEnum.CONNECTOR)){
+                token = phraseLexerService.readToken();
             }
         }
         int sizeNumericTokens = numericTokens.size();
@@ -27,7 +39,7 @@ public class Parser {
         int currentExponential = 0;
         //read the number from left to right
         for(int i = sizeNumericTokens -1; i >= 0;i--){
-            cardinalNumber = CardinalNumbersCatalog.getCardinalNumber(numericTokens.get(i).getValue());
+            cardinalNumber = cardinalNumbersCatalogRepository.getCardinalNumber(numericTokens.get(i).getValue());
             currentExponential = cardinalNumber.getDecimalExponential().intValue();
             if(currentExponential> 0 && currentExponential % 6 == 0){
                 decimalExponential = cardinalNumber.getDecimalExponential();
@@ -47,7 +59,7 @@ public class Parser {
                         if (cardinalNumber.getSingularCardinalName().equals("mil")) {
                             value = BigDecimal.ONE;
                             if (i > 0) {
-                                CardinalNumber nextCardinalNumber = CardinalNumbersCatalog.getCardinalNumber(numericTokens.get(i - 1).getValue());
+                                CardinalNumber nextCardinalNumber = cardinalNumbersCatalogRepository.getCardinalNumber(numericTokens.get(i - 1).getValue());
                                 if (nextCardinalNumber.getDecimalExponential().intValue() <= 2) {
                                     addNumber = false;
                                 }
@@ -74,7 +86,8 @@ public class Parser {
         return numericValue.toString();
     }
 
-    private void validateSyntaxNumber(CardinalNumber previosCardinalNumber, CardinalNumber cardinalNumber) {
+    @Override
+    public void validateSyntaxNumber(CardinalNumber previosCardinalNumber, CardinalNumber cardinalNumber) {
         int currentExponential = cardinalNumber.getDecimalExponential().intValue();
         int previousExponential = previosCardinalNumber.getDecimalExponential().intValue();
         //if the number is between 1 and 999, validate syntax

@@ -1,6 +1,8 @@
-package com.globantx.cardinalevaluator;
+package com.globantx.cardinalevaluator.infrastructure.repository.csv;
 
-import lombok.experimental.UtilityClass;
+import com.globantx.cardinalevaluator.domain.entities.CardinalNumber;
+import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCatalogRepository;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,18 +15,18 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-@UtilityClass
-public class CardinalNumbersCatalog {
+@Repository
+public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatalogRepository {
     private static final int NUMBER_POSITION = 0;
     private static final int CARDINAL_POSITION = 1;
 
     private static final int IS_PLURAL_NUMBER_POSITION = 2;
 
-    private Map<String,CardinalNumber> cardinalNumberMap;
+    private Map<String, CardinalNumber> cardinalNumberMap;
 
-    public Map<String,CardinalNumber> getCardinalNumberMap() throws URISyntaxException, IOException {
-        if(cardinalNumberMap == null) {
-            Map<String,CardinalNumber> modifiableMap = new HashMap<>();
+    public Map<String, CardinalNumber> getCardinalNumberMap() throws URISyntaxException, IOException {
+        if (cardinalNumberMap == null) {
+            Map<String, CardinalNumber> modifiableMap = new HashMap<>();
             try (Stream<String> stream = Files.lines(Paths.get(ClassLoader.getSystemResource("CardinalNumbersDictionary_es.csv").toURI()))) {
                 AtomicBoolean isData = new AtomicBoolean(false);
                 stream.forEach(line -> {
@@ -32,9 +34,9 @@ public class CardinalNumbersCatalog {
                         //1 000 000 000 000	billon	billones
                         String[] tokens = line.split("\t");
                         CardinalNumber cardinalNumber = CardinalNumber.builder()
-                                .numericValueText(tokens[NUMBER_POSITION])
-                                .singularCardinalName(tokens[CARDINAL_POSITION])
-                                .plural(Boolean.valueOf(tokens[IS_PLURAL_NUMBER_POSITION])).build();
+                                .numericValueText(tokens[CsvCardinalNumbersCatalogRepository.NUMBER_POSITION])
+                                .singularCardinalName(tokens[CsvCardinalNumbersCatalogRepository.CARDINAL_POSITION])
+                                .plural(Boolean.valueOf(tokens[CsvCardinalNumbersCatalogRepository.IS_PLURAL_NUMBER_POSITION])).build();
                         modifiableMap.put(cardinalNumber.getSingularCardinalName(), cardinalNumber);
                     }
                     isData.set(true);
@@ -55,10 +57,11 @@ public class CardinalNumbersCatalog {
         return getCardinalNumberMap().get(getNormalizedText(phrase));
     }
 
-    private String getNormalizedText(String phrase){
+    public String getNormalizedText(String phrase) {
         //eliminate tildes in comparation of numbers
         String normalizePhrase = Normalizer.normalize(phrase, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         //get numbers in lowercase
         return normalizePhrase.toLowerCase();
     }
+
 }
