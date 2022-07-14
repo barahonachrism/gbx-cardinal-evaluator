@@ -1,0 +1,16 @@
+logging:
+  level:
+    root: INFO
+server:
+  port : 8080
+  servlet:
+    context-path: /cardinal-evaluator
+spring:
+  profiles:
+    active: "dev"
+---
+spring:
+  profiles: "pro"
+---
+spring:
+  profiles: "dev"
