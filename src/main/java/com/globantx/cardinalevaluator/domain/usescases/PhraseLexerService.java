@@ -21,6 +21,10 @@ public class PhraseLexerService implements LexerService {
         position = 0;
         this.cardinalNumbersCatalogRepository = CardinalNumbersCatalogRepository;
     }
+
+    public boolean hasMoreTokens(){
+        return position < tokenParts.length;
+    }
     public List<Token> readAllTokens() {
         List<Token> tokens = new ArrayList<>();
         Token token = readToken();
