@@ -1,7 +1,17 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '2.6.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "org.sonarqube" version "3.4.0.2513"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "barahonachrism_globantx-cardinal-evaluator"
+        property "sonar.organization", "barahonachrism"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 group 'com.globantx'
@@ -41,4 +51,20 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['com/globant/courier/glober/infrastructure/entities/**',
+                                        'com/globant/courier/glober/domain/models/**'])
+        }))
+    }
+    dependsOn test // tests are required to run before generating the
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
 }

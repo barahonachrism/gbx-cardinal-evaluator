@@ -1,12 +1,12 @@
 package com.globantx.cardinalevaluator.domain.entities;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 
 
-@Builder
 @Getter
 public class CardinalNumber {
     private String singularCardinalName;
@@ -14,6 +14,12 @@ public class CardinalNumber {
     private String numericValueText;
     private BigDecimal decimalExponential;
     private BigDecimal numericValue;
+    @Builder
+    public CardinalNumber(String singularCardinalName, boolean plural, String numericValueText){
+        this.singularCardinalName = singularCardinalName;
+        this.plural = plural;
+        this.numericValueText = numericValueText;
+    }
 
     public BigDecimal getDecimalExponential(){
         if(decimalExponential == null){
