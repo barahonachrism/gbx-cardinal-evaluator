@@ -1,4 +1,4 @@
-package com.globantx.cardinalevaluator.unit;
+package com.globantx.cardinalevaluator.test.unit;
 
 import com.globantx.cardinalevaluator.domain.ports.services.ParserService;
 import com.globantx.cardinalevaluator.domain.usescases.PhraseLexerService;
@@ -28,7 +28,7 @@ public class CardinalNumberTest {
     private CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository;
 
     @Autowired
-    ParserService phraseParserService;
+    private ParserService phraseParserService;
 
     @DataTableType
     public Token tokenType(Map<String, String> entry) {

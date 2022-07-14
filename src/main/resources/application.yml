@@ -4,10 +4,13 @@ logging:
 server:
   port : 8080
   servlet:
-    context-path: /cardinal-evaluator
+    context-path: /
 spring:
   profiles:
     active: "dev"
+spring-doc:
+  swagger-ui:
+    path: /swagger-ui.html
 ---
 spring:
   profiles: "pro"

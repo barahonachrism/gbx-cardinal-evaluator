@@ -1,4 +1,4 @@
-Feature: El objetivo es que traduzca frases de todo tipo, que tengan numeros escritos en letras adentro, como por ejemplo: "Quisiera transferir ciento cincuenta pesos a Juan Perez que vive en la calle Rivadavia cuarenta y tres"-> "Quisiera transferir 150 pesos a Juan Perez que vive en la calle Rivadavia 43"
+Feature: Pruebas unitarias. El objetivo es que traduzca frases de todo tipo, que tengan numeros escritos en letras adentro, como por ejemplo: "Quisiera transferir ciento cincuenta pesos a Juan Perez que vive en la calle Rivadavia cuarenta y tres"-> "Quisiera transferir 150 pesos a Juan Perez que vive en la calle Rivadavia 43"
   Scenario: Identificar numeros en una frase
     Given La frase "Quiero hacer una transferencia de cuatro mil quinientos sesenta y seis millones trescientos cuarenta y cinco mil seiscientos setenta y ocho y que me envien el correo de confirmacion"
     And la tabla de numeros cardinales en letras adjunta
