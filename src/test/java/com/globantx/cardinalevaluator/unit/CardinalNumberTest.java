@@ -56,7 +56,7 @@ public class CardinalNumberTest {
     }
 
     @Then("Obtener los tokes segun la tabla adjunta")
-    public void obtener_los_tokes_segun_la_tabla_adjunta(List<Token> tokenList) throws URISyntaxException, IOException {
+    public void obtener_los_tokes_segun_la_tabla_adjunta(List<Token> tokenList) {
         PhraseLexerService phraseLexerService = new PhraseLexerService(phrase,cardinalNumbersCatalogRepository);
         Assertions.assertEquals(tokenList, phraseLexerService.readAllTokens());
     }
@@ -66,7 +66,7 @@ public class CardinalNumberTest {
         this.cardinalValue = cardinalValue;
     }
     @Then("el valor numerico correspondiente sera {int}")
-    public void el_valor_numerico_correspondiente_sera(Integer numericValue) throws URISyntaxException, IOException {
+    public void el_valor_numerico_correspondiente_sera(Integer numericValue) {
         Assertions.assertEquals(String.valueOf(numericValue), phraseParserService.parsePhrase(cardinalValue));
     }
 
@@ -77,7 +77,7 @@ public class CardinalNumberTest {
     }
 
     @Then("El valor numerico es {string}")
-    public void el_valor_numerico_es(String expectedValue) throws URISyntaxException, IOException {
+    public void el_valor_numerico_es(String expectedValue) {
 
         Assertions.assertEquals(expectedValue, phraseParserService.parsePhrase(cardinalValue));
     }
