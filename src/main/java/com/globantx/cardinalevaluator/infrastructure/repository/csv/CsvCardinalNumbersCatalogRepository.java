@@ -6,7 +6,6 @@ import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCat
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,13 +28,11 @@ public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatal
     public Map<String, CardinalNumber> getCardinalNumberMap() {
         if (cardinalNumberMap == null) {
             Map<String, CardinalNumber> modifiableMap = new HashMap<>();
-            URI dictionaryUri = null;
 
             try (Stream<String> stream = Files.lines(Paths.get(getClass().getResource("/dictionary/CardinalNumbersDictionary_es.csv").toURI()))) {
                 AtomicBoolean isData = new AtomicBoolean(false);
                 stream.forEach(line -> {
                     if (isData.get()) {
-                        //1 000 000 000 000	billon	billones
                         String[] tokens = line.split("\t");
                         CardinalNumber cardinalNumber = CardinalNumber.builder()
                                 .numericValueText(tokens[CsvCardinalNumbersCatalogRepository.NUMBER_POSITION])
@@ -46,9 +43,7 @@ public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatal
                     isData.set(true);
                 });
                 cardinalNumberMap = Collections.unmodifiableMap(modifiableMap);
-            } catch (IOException e) {
-                throw new CsvParseException("Error to read file csv as cardinal numbers database",e);
-            } catch (URISyntaxException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new CsvParseException("Error to read file csv as cardinal numbers database",e);
             }
         }

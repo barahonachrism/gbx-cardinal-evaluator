@@ -38,4 +38,11 @@ public class CardinalNumberSyntaxService implements SyntaxService {
             throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
     }
+
+    @Override
+    public void validateTenNumber(CardinalNumber cardinalTenNumber, CardinalNumber cardinalUnitNumber) {
+        if(!(cardinalTenNumber.getDecimalExponential().intValue()==1 && cardinalUnitNumber.getDecimalExponential().intValue()==0)){
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
+        }
+    }
 }

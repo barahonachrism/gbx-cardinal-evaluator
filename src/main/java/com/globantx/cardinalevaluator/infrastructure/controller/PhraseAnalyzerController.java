@@ -44,8 +44,7 @@ public class PhraseAnalyzerController implements AnalyzerController {
             evaluatedPhrase = parserService.parsePhrase(phrase.getPhrase());
             status = HttpStatus.OK;
             responseMessage = status.toString();
-        }catch(Exception e){
-            log.error("Error to read the phrase",e);
+        }catch(CsvParseException | PhraseParseException e){
             evaluatedPhrase = "";
             responseMessage = e.getMessage();
             status = HttpStatus.BAD_REQUEST;
