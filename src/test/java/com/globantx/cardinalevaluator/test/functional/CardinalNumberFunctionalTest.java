@@ -1,5 +1,6 @@
 package com.globantx.cardinalevaluator.test.functional;
 
+import com.globantx.cardinalevaluator.domain.dto.PhraseRequestDto;
 import com.globantx.cardinalevaluator.domain.dto.PhraseResponseDto;
 import com.globantx.cardinalevaluator.domain.ports.services.ParserService;
 import io.cucumber.java.en.Given;
@@ -24,12 +25,14 @@ public class CardinalNumberFunctionalTest {
     @Then("La frase en numeros {string} por servicio web")
     public void la_frase_en_numeros(String expectedPhrase) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        HttpEntity<?> entity = new HttpEntity<>(headers);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/");
 
-        ResponseEntity<PhraseResponseDto> evaluatedPhraseDto = restTemplate.postForEntity(builder.toUriString(), phrase,PhraseResponseDto.class );
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/cardinal-evaluator");
+        PhraseRequestDto phraseRequestDto = PhraseRequestDto.builder().phrase(phrase).build();
+        HttpEntity<PhraseRequestDto> requestEntity = new HttpEntity<>(phraseRequestDto, headers);
+
+        ResponseEntity<PhraseResponseDto> evaluatedPhraseDto = restTemplate.postForEntity(builder.toUriString(), requestEntity,PhraseResponseDto.class );
 
         Assertions.assertEquals(expectedPhrase,evaluatedPhraseDto.getBody().getEvaluatedPhrase());
     }

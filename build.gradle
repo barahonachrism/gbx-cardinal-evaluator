@@ -73,3 +73,8 @@ jacocoTestReport {
         html.enabled true
     }
 }
+
+
+bootBuildImage{
+    imageName "barahonachrism/globantx-cardinal-evaluator:${version}"
+}

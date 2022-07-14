@@ -6,6 +6,7 @@ import com.globantx.cardinalevaluator.domain.ports.repository.CardinalNumbersCat
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,7 +29,9 @@ public class CsvCardinalNumbersCatalogRepository implements CardinalNumbersCatal
     public Map<String, CardinalNumber> getCardinalNumberMap() {
         if (cardinalNumberMap == null) {
             Map<String, CardinalNumber> modifiableMap = new HashMap<>();
-            try (Stream<String> stream = Files.lines(Paths.get(ClassLoader.getSystemResource("CardinalNumbersDictionary_es.csv").toURI()))) {
+            URI dictionaryUri = null;
+
+            try (Stream<String> stream = Files.lines(Paths.get(getClass().getResource("/dictionary/CardinalNumbersDictionary_es.csv").toURI()))) {
                 AtomicBoolean isData = new AtomicBoolean(false);
                 stream.forEach(line -> {
                     if (isData.get()) {
