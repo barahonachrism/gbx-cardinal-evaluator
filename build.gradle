@@ -57,8 +57,7 @@ test {
 jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['com/globant/courier/glober/infrastructure/entities/**',
-                                        'com/globant/courier/glober/domain/models/**'])
+            fileTree(dir: it, exclude: [])
         }))
     }
     dependsOn test // tests are required to run before generating the
