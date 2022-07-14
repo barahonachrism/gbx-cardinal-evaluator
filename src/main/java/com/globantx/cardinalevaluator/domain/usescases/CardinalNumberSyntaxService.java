@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CardinalNumberSyntaxService implements SyntaxService {
+    private static final String SYNTAX_INVALID_MESSAGE = "The syntax of number not is valid";
     @Override
     public void validateSyntaxNumber(CardinalNumber previosCardinalNumber, CardinalNumber cardinalNumber) {
         int currentExponential = cardinalNumber.getDecimalExponential().intValue();
@@ -15,26 +16,26 @@ public class CardinalNumberSyntaxService implements SyntaxService {
         if(currentExponential < 3 &&
                 previousExponential < 3 &&
                 previousExponential>= currentExponential){
-            throw new PhraseParseException("The syntax of number not is valid");
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
         //if the number is part of a plural number, validate that current number not has more digits that previous number
         if(previosCardinalNumber.isPlural()
                 && currentExponential >= previousExponential){
-            throw new PhraseParseException("The syntax of number not is valid");
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
         //La centena se expresa como «cien» si va sola o acompañada de un multiplo de mil
         if(cardinalNumber.getSingularCardinalName().equals("cien")  && previousExponential < 3){
-            throw new PhraseParseException("The syntax of number not is valid");
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
         //La centena se expresa como «ciento» si va acompañada de decenas o unidades
         if(cardinalNumber.getSingularCardinalName().equals("ciento")  && previousExponential > 1){
-            throw new PhraseParseException("The syntax of number not is valid");
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
     }
 
     public void validateSyntax(CardinalNumber cardinalNumber, int currentExponential) {
         if(cardinalNumber != null && cardinalNumber.isPlural() && currentExponential > 3){
-            throw new PhraseParseException("The syntax number not is valid");
+            throw new PhraseParseException(SYNTAX_INVALID_MESSAGE);
         }
     }
 }

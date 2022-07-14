@@ -5,5 +5,9 @@ public enum ConectorTypeEnum {
     ConectorTypeEnum(String value){
         this.value = value;
     }
-    public String value;
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
 }

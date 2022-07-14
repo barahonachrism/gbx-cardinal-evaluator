@@ -16,10 +16,10 @@ public class PhraseLexerService implements LexerService {
 
     private CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository;
 
-    public PhraseLexerService(String phrase, CardinalNumbersCatalogRepository CardinalNumbersCatalogRepository) {
+    public PhraseLexerService(String phrase, CardinalNumbersCatalogRepository cardinalNumbersCatalogRepository) {
         this.tokenParts = phrase.split(" ");
         position = 0;
-        this.cardinalNumbersCatalogRepository = CardinalNumbersCatalogRepository;
+        this.cardinalNumbersCatalogRepository = cardinalNumbersCatalogRepository;
     }
 
     public boolean hasMoreTokens(){
@@ -41,7 +41,7 @@ public class PhraseLexerService implements LexerService {
             String value = tokenParts[position];
             if (cardinalNumbersCatalogRepository.hasNumber(value)) {
                 token = Token.builder().type(TokenTypeEnum.NUMBER).value(value).build();
-            } else if (ConectorTypeEnum.AND.value.equals(value.toUpperCase()) ) {
+            } else if (ConectorTypeEnum.AND.getValue().equals(value.toUpperCase()) ) {
                 token = Token.builder().type(TokenTypeEnum.CONNECTOR).value(value).build();
             } else {
                 token = Token.builder().value(value).type(TokenTypeEnum.WORD).build();

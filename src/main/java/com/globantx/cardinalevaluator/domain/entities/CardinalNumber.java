@@ -1,6 +1,5 @@
 package com.globantx.cardinalevaluator.domain.entities;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 

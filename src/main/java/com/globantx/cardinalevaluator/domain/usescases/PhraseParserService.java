@@ -39,7 +39,7 @@ public class PhraseParserService implements ParserService {
                     token = phraseLexerService.readToken();
                 }
             }
-            if(numericTokens.size()>0) {
+            if(!numericTokens.isEmpty()) {
                 String numberValue = evaluateNumber(numericTokens);
                 appendText(evaluatedPhrase, numberValue);
                 if(token !=null){
@@ -76,26 +76,24 @@ public class PhraseParserService implements ParserService {
                 syntaxService.validateSyntaxNumber(previosCardinalNumber, cardinalNumber);
             }
             if(decimalExponential.intValue() >= 3){
-                if(!cardinalNumber.isPlural()) {
-                    if (currentExponential <=3 ||  decimalExponential.intValue() % 6 != 0) {
-                        BigDecimal value;
-                        boolean addNumber = true;
-                        if (cardinalNumber.getSingularCardinalName().equals(oneThousandNumber)) {
-                            value = BigDecimal.ONE;
-                            if (i > 0) {
-                                CardinalNumber nextCardinalNumber = cardinalNumbersCatalogRepository.getCardinalNumber(numericTokens.get(i - 1).getValue());
-                                if (nextCardinalNumber.getDecimalExponential().intValue() <= 2) {
-                                    addNumber = false;
-                                }
+                if(!cardinalNumber.isPlural() && (currentExponential <=3 ||  decimalExponential.intValue() % 6 != 0)) {
+                    BigDecimal value;
+                    boolean addNumber = true;
+                    if (cardinalNumber.getSingularCardinalName().equals(oneThousandNumber)) {
+                        value = BigDecimal.ONE;
+                        if (i > 0) {
+                            CardinalNumber nextCardinalNumber = cardinalNumbersCatalogRepository.getCardinalNumber(numericTokens.get(i - 1).getValue());
+                            if (nextCardinalNumber.getDecimalExponential().intValue() <= 2) {
+                                addNumber = false;
                             }
-                        } else {
-                            value = cardinalNumber.getNumericValue();
                         }
-                        BigDecimal multiplier = value.multiply(BigDecimal.TEN.pow(decimalExponential.intValue()));
+                    } else {
+                        value = cardinalNumber.getNumericValue();
+                    }
+                    BigDecimal multiplier = value.multiply(BigDecimal.TEN.pow(decimalExponential.intValue()));
 
-                        if (addNumber) {
-                            numericValue = numericValue.add(multiplier);
-                        }
+                    if (addNumber) {
+                        numericValue = numericValue.add(multiplier);
                     }
                 }
             }
