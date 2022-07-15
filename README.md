@@ -12,7 +12,7 @@ http://3.208.24.200:8080/swagger-ui/index.html
 ## Architecture
 This project use Clean Code Architecture with DDD patterns and BDD patterns. The architecture permits switch the adapters easily to external database or REST services as improvement.
 
-![GlobantX Cardinal Evaluator Architecture](src/main/resources/images/globantx-cardinal-evaluator-architecture.png "RMM Architecture")
+![GlobantX Cardinal Evaluator Architecture](src/main/resources/images/gbx-cardinal-evaluator-architecture.png "RMM Architecture")
 
 ## Technology
 The application use the next tools and frameworks:

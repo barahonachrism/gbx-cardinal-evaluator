@@ -19,7 +19,7 @@ sonarqube {
     }
 }
 
-group 'com.globantx'
+group 'com.gbx'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -76,5 +76,5 @@ jacocoTestReport {
 
 
 bootBuildImage{
-    imageName "barahonachrism/globantx-cardinal-evaluator:${version}"
+    imageName "barahonachrism/gbx-cardinal-evaluator:${version}"
 }
