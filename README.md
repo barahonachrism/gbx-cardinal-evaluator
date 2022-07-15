@@ -1,4 +1,4 @@
-# GlobantX Cardinal Numbers Evaluator
+# GbX Cardinal Numbers Evaluator
 This app expose REST API to evaluate the cardinals numbers embedded in a phrase and
 transform this numbers in decimal base digits.
 ## Caution
